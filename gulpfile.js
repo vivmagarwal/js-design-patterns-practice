@@ -16,7 +16,41 @@ const gulp = require("gulp"),
 
 sass.compiler = require('node-sass');
 
+// @todo : handle it manually instead of yargs
+// process parameters manually for clone example {clone: [from, to]}
+
+// let cli_args = process_args.reduce(function (agg, item) { 
+//   let last_command;
+
+//   if (last_command && last_command == 'clone') {
+//     if (!(item.startsWith = '--')) {
+//       aggg[`${last_command}`].push(item);
+//     }
+//   }
+  
+//   if (last_command && last_command.startsWith('--')) {
+//     agg[`${last_command}`].push(item);
+//   }
+
+//   // setting the last item; keep it below the rest of the code.
+//   if (item == 'clone') {
+//     last_command == item;
+//     agg.clone = [];
+//   }
+
+//   if (item.startsWith = '--') {
+//     last_command == item;
+//     agg[`${last_command}`] = [];
+//   }
+
+//   return agg;
+// }, {});
+
+// console.log('cli_args '. cli_args);
+
 var page;
+var clonefrom;
+var cloneto;
 var withstyle;
 
 if (argv.page) {
@@ -24,6 +58,22 @@ if (argv.page) {
     page = kc(argv.page).slice(1);
   } else {
     page = kc(argv.page);
+  } 
+}
+
+if (argv.from && argv.from !== true) {
+  clonefrom = argv.from;
+}
+
+if (argv.to) {
+  if (kc(argv.to).charAt(0) === '-') {
+    cloneto = kc(argv.to).slice(1);
+  } else {
+    cloneto = kc(argv.to);
+  }
+} else {
+  if (clonefrom) {
+    cloneto = file_newname(path.join(__dirname, 'pages'), `${clonefrom}-clone`)
   }
 }
 
@@ -192,3 +242,42 @@ gulp.task('linksInject', async function (done) {
 });
 
 gulp.task('generate', gulp.series(gulp.parallel('twig:html', 'twig:scss', 'twig:script'), 'linksInject'));
+
+gulp.task('clone-page', function () {
+  if (!clonefrom || !(fs.existsSync(path.join(__dirname, 'pages',clonefrom)))) {
+    throw new Error('Incorrect clone from!');
+  }
+  
+  return gulp
+  .src(path.join(__dirname, 'pages', clonefrom, '*'))
+  .pipe(gulp.dest(path.join(__dirname, 'pages', cloneto)))
+});
+
+gulp.task('clone', gulp.series(gulp.parallel('clone-page'), 'linksInject'));
+
+/* ===== helper functions ===== */
+
+// todo : make sure it is the last dot.
+function file_newname(path, filename) {
+  let name, ext;
+
+  if (filename.indexOf('.') !==  -1) {
+    let pos = filename.indexOf('.')
+    name = filename.substring(0, pos);
+    ext = filename.substring(pos)
+  } else {
+    name = filename;
+  }
+
+  let newpath = `${path}/${filename}`;
+  let newname = filename;
+
+  let counter = 0;
+  while (fs.existsSync(newpath)) {
+    newname = ext ? `${name}-${counter}.${ext}` : `${name}-${counter}`;
+    newpath = `${path}/${newname}`;
+    counter++;
+   }
+  
+  return newname;
+}

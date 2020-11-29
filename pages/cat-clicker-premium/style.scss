@@ -1,0 +1,27 @@
+// cat-clicker specific stylings here.
+.main-content {
+  padding-top: 2rem;
+  padding-left: 4rem;
+}
+
+.cat-pic {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+}
+
+.cat-pic-wrapper {
+  display: none;
+}
+
+.cat-pic-wrapper.current-item {
+  display: block;
+}
+
+.cat-slide-show {
+  display: flex;
+}
+
+.cat-slide-show__left {
+  padding-right: 2rem;
+}
