@@ -1,7 +1,6 @@
 console.log('creational-singleton works!!');
 
 // limit creation to one.
-// https://www.youtube.com/watch?v=JKNjfDCNPa4&list=PLREW9ZuU80uTfmxo61-acnUYk3P_4plIF&index=4&ab_channel=DevSage
 
 const Singleton = (function () {
   let pManager;
