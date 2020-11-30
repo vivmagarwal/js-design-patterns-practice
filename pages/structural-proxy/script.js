@@ -53,6 +53,3 @@ console.log(proxy.getValue('bitcoin'));
 console.log(proxy.getValue('litcoin'));
 
 console.log('.:*~*:._.:*~*:._.:*~*:._.:*~*:._.:*~*:.'); 
-
-// https://www.youtube.com/watch?v=SFTpSFQNPts&list=PLREW9ZuU80uTfmxo61-acnUYk3P_4plIF&index=8&ab_channel=DevSage
-// https://www.youtube.com/watch?v=BWprw8UHIzA&list=PLZlA0Gpn_vH_CthENcPCM0Dww6a5XYC7f&ab_channel=WebDevSimplified
